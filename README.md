@@ -1,4 +1,4 @@
-# gRPC multiprocessing with streams
+# gRPC multiprocessing with streaming
 
 This repo is a boilerplate showing how you can use multiprocessing with gRPC with streaming capabilities in Python
 
