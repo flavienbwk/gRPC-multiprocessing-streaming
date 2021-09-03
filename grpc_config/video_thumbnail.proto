@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package video_thumbnail;
+
+// A candidate video chunk for thumbnailing
+message VideoCandidate {
+    // binary chunk of the OpenCV video (input)
+    bytes chunk = 1;
+}
+
+// Thumbnail response of the requested video
+message VideoResult {
+    bool error = 1;
+    bytes chunk = 2; // Pickled np.ndarray thumbnail chunk
+}
+
+// Service to perform video thumbnailing
+service Video {
+    rpc Process (stream VideoCandidate) returns (stream VideoResult) {}
+}

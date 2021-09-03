@@ -1,0 +1,35 @@
+version: '2.1'
+
+services:
+    client:
+        build: .
+        command: python3.8 /usr/app/client.py
+        environment:
+          NUM_JOBS: 2 # Number of videos to parallely process
+          MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Go is gRPC-Python's max payload size
+        volumes:
+          - ./input:/usr/app/input:rw
+          - ./output:/usr/app/output:rw
+          - ./client.py:/usr/app/client.py:ro
+          - ./grpc_config:/usr/app/grpc_config:ro
+        depends_on:
+          server:
+            condition: service_healthy
+    
+    server:
+      build: .
+      init: true # Start process run with PID 1 to benefit SIG* signals
+      environment:
+        NUM_WORKERS: 2 # Number of server workers to instanciate
+        MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Go is gRPC-Python's max payload size
+      command: python3.8 /usr/app/server.py
+      volumes:
+        - ./grpc_config:/usr/app/grpc_config:ro
+        - ./server.py:/usr/app/server.py:ro
+      healthcheck:
+        # Health checks enable you to ensure a service is healthy and condition other services start upon this service health. 
+        # For more info, see see https://docs.docker.com/compose/compose-file/compose-file-v3/#healthcheck
+        test: [ "CMD-SHELL", "echo $$(grpcurl -plaintext server:13000 list 2>&1) | grep \"API\" > /dev/null" ]
+        interval: 1s
+        timeout: 5s
+        retries: 5
