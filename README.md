@@ -2,7 +2,7 @@
 
 This repo is a boilerplate showing how you can use multiprocessing with gRPC with streaming capabilities in Python
 
-Streaming payloads allows **bypassing [gRPC's 2Go limit](https://stackoverflow.com/questions/34128872/google-protobuf-maximum-size)** in its Python implementation.
+Payloads streaming allows **bypassing [gRPC's 2Go limit](https://stackoverflow.com/questions/34128872/google-protobuf-maximum-size)** in its Python implementation.
 
 ## Getting started
 
@@ -13,9 +13,9 @@ This project offers a minimum reproducible example of clients sending batches of
 
 `client.py` starts a pool of several gRPC channels. Each client process is attributed a video and cuts it into chunks that are sent to one of the gRPC servers parallely to other client processes.
 
-Response including thumbnail for each gets returned and cut if exceeding 2Go as well.
+Each response including the video thumbnail gets returned and cut if exceeding 2Go as well.
 
-![Flow schema](./flow.png)
+<div style="text-align:center"><img src="./flow.png" /></div>
 
 1. Adjust the `NUM_WORKERS` and `NUM_JOBS` variables in `docker-compose.yml` if desired
 
