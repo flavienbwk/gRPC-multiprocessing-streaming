@@ -6,7 +6,7 @@ services:
         command: python3.8 /usr/app/client.py
         environment:
           NUM_JOBS: 2 # Number of videos to parallely process
-          MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Go is gRPC-Python's max payload size
+          MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Gb is gRPC-Python's max payload size
         volumes:
           - ./input:/usr/app/input:rw
           - ./output:/usr/app/output:rw
@@ -21,7 +21,7 @@ services:
       init: true # Start process run with PID 1 to benefit SIG* signals
       environment:
         NUM_WORKERS: 2 # Number of server workers to instanciate
-        MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Go is gRPC-Python's max payload size
+        MAX_GRPC_PAYLOAD_SIZE: 2000000000 # 2Gb is gRPC-Python's max payload size
       command: python3.8 /usr/app/server.py
       volumes:
         - ./grpc_config:/usr/app/grpc_config:ro
