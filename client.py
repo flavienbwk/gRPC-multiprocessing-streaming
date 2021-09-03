@@ -28,7 +28,7 @@ MAX_GRPC_PAYLOAD_SIZE = int(os.environ.get("MAX_GRPC_PAYLOAD_SIZE", 2000000000))
 
 def perform_binary_slicing(data: bytes, chunk_size: int) -> Iterable[bytes]:
     """
-    Slices a binary string into chunks of chunk_size.
+    Slices a binary blob into chunks of chunk_size.
     """
     data_size = sys.getsizeof(data)
     if data_size < chunk_size:
@@ -42,7 +42,7 @@ def perform_binary_slicing(data: bytes, chunk_size: int) -> Iterable[bytes]:
 
 def perform_binary_slicing(data: bytes, chunk_size: int) -> Iterable[bytes]:
     """
-    Slices a binary string into chunks of chunk_size.
+    Slices a binary blob into chunks of chunk_size.
     """
     data_size = sys.getsizeof(data)
     if data_size < chunk_size:
@@ -56,7 +56,7 @@ def perform_binary_slicing(data: bytes, chunk_size: int) -> Iterable[bytes]:
 
 def perform_binary_slicing_payloads(data: bytes, chunk_size: int) -> Iterable:
     """
-    Slices a binary string into chunks of chunk_size with gRPC message expected by the server.
+    Slices a binary blob into chunks of chunk_size with gRPC message expected by the server.
     """
     for chunk in perform_binary_slicing(data, chunk_size):
         yield video_thumbnail_pb2.VideoCandidate(chunk=chunk)
@@ -75,7 +75,7 @@ def _run_worker_query(
         video_binary (bytes): bytes representation of the video
 
     Returns:
-        (bytes): bytes representation of the thumbnaild video
+        tuple(str, np.ndarray): video_identifier, thumbnail as np array (OpenCV-ready)
     """
     channel = grpc.insecure_channel(
         server_address,
