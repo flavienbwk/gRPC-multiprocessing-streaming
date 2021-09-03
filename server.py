@@ -61,7 +61,7 @@ def get_video_thumbnail(video_path: str) -> np.ndarray:
 
 def perform_binary_slicing(data: bytes, chunk_size: int) -> Iterable[bytes]:
     """
-    Slices a binary string into chunks of chunk_size.
+    Slices a binary blob into chunks of chunk_size.
     """
     data_size = sys.getsizeof(data)
     if data_size < chunk_size:
@@ -77,7 +77,7 @@ def perform_binary_slicing_payloads(
     data: bytes, chunk_size: int
 ) -> Iterable[video_thumbnail_pb2.VideoResult]:
     """
-    Slices a binary string into chunks of chunk_size with gRPC message expected by the server.
+    Slices a binary blob into chunks of chunk_size with gRPC message expected by the server.
     """
     for chunk in perform_binary_slicing(data, chunk_size):
         yield video_thumbnail_pb2.VideoResult(error=False, chunk=chunk)
@@ -134,7 +134,7 @@ def _run_server(bind_address, worker_id):
     server.add_insecure_port(bind_address)
     server.start()
     done = threading.Event()
-    signal.signal(signal.SIGTERM, on_done)  # catch SIGTERM for quick container exit
+    signal.signal(signal.SIGTERM, on_done)  # catch SIGTERM for clean container exit
     done.wait()
     server.wait_for_termination()
 
